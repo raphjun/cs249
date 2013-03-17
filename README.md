@@ -7,9 +7,9 @@ Project Description: The purpose of this project is to ensure that you understan
 
 Project Submission: You should upload a zip file of your project on BBLearn. The project should contain all of your code (except IDE-specific files), a readable screen capture (or UNIX script) of your program compiling and running, and a write up. Your write-up MUST include:
 
-• Details exactly how to execute your code to test each of the three parts
-• Discusses the efficiency of each part
-• Identifies anyone you collaborated* with.
+* Details exactly how to execute your code to test each of the three parts
+* Discusses the efficiency of each part
+* Identifies anyone you collaborated* with.
 
 *Note: Collaboration with respect to how to solve the problem is acceptable. However, you must write and comment your own code individually.
 
