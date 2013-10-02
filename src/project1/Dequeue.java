@@ -16,6 +16,12 @@ public class Dequeue<E> {
         end = -1;
     }
 
+    /**
+     * insertLeft inserts an element on the left-side of the queue
+     * 
+     * @param e the element to insert
+     * @return true if successful
+     */
     public boolean insertLeft(E e) {
         if (isFull()) {
             return false;
@@ -35,6 +41,12 @@ public class Dequeue<E> {
         return true;
     }
 
+    /**
+     * insertRight inserts elements on the right-side of the queue
+     * 
+     * @param e the element to insert
+     * @return true if successful
+     */
     public boolean insertRight(E e) {
         if (isFull()) {
             return false;
@@ -54,6 +66,11 @@ public class Dequeue<E> {
         return true;
     }
 
+    /**
+     * removeLeft removes elements from the left-side of the queue
+     * 
+     * @return the removed element
+     */
     public E removeLeft() {
         if (isEmpty()) {
             return null;
@@ -74,6 +91,11 @@ public class Dequeue<E> {
         return e;
     }
 
+    /**
+     * removeRight removes elements from the right-side of the queue
+     * 
+     * @return the removed element
+     */
     public E removeRight() {
        if (isEmpty()) {
             return null;
@@ -95,6 +117,7 @@ public class Dequeue<E> {
     }
 
     /**
+     * isEmpty returns true if the queue is empty
      * 
      * @return true if empty
      */
@@ -102,8 +125,10 @@ public class Dequeue<E> {
         return start == -1 && end == -1;
     }
 
-    /*
-     * @ return true if full
+    /**
+     * isFull returns true if the queue is full
+     * 
+     * @return true if full
      */
     public boolean isFull() {
         return (end == start - 1) || (start == 0 && end == dequeue.length - 1) || dequeue.length == 0;

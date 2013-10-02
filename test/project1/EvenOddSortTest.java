@@ -16,6 +16,20 @@ public class EvenOddSortTest {
      * Test of sort method, of class EvenOddSort.
      */
     @Test
+    public void testSort0() {
+        System.out.println("sort");
+        System.out.println("It should sort a 0 element array");
+        int[] arr = new int[0];
+        EvenOddSort instance = new EvenOddSort(arr);
+        int[] expResult = new int[0];
+        int[] result = instance.sort();
+        assertArrayEquals(expResult, result);
+    }
+    
+    /**
+     * Test of sort method, of class EvenOddSort.
+     */
+    @Test
     public void testSort1() {
         System.out.println("sort");
         System.out.println("It should sort a single element array");
