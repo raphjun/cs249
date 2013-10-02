@@ -1,10 +1,6 @@
 package project1;
 
 /**
- * EvenOddSort runs in:
- * Best case: O(N/2)
- * Worst case: O(N^2/2)
- * 
  * @author Jason Travis
  */
 public class EvenOddSort {
@@ -17,11 +13,7 @@ public class EvenOddSort {
     
     /**
      * sort uses the even-odd sort algorithm to sort the array.
-     * An example of where an algorithm like this would be particularly
-     * useful would be on a multiprocessor computer, distributed system, or
-     * General-purpose processing on Graphic Processing Unit (GPGPU) program
-     * where a subset of data could be sorted by a core/thread without stepping on
-     * the work of any other.
+     * 
      * @return the sorted array
      */
     public int[] sort() {

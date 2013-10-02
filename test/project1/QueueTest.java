@@ -24,7 +24,9 @@ public class QueueTest {
         System.out.println("toString");
         System.out.println("It should print an empty string if the queue is empty");
         assertEquals("", new Queue(0).toString());
+        System.out.println(new Queue(0).toString());
         assertEquals("", new Queue(1).toString());
+        System.out.println(new Queue(1).toString());
     }
     
     /**
@@ -39,6 +41,7 @@ public class QueueTest {
         String expResult = "42";
         String result = instance.toString();
         assertEquals(expResult, result);
+        System.out.println(result);
     }
     
     /**
@@ -54,12 +57,12 @@ public class QueueTest {
         }
         instance.remove();
         instance.insert(3);
-        String expResult = "1, 2, 3";
-        String result = instance.toString();
-        assertEquals(expResult, result);
+        assertEquals("1, 2, 3", instance.toString());
+        System.out.println(instance.toString());
         instance.remove();
         instance.insert(4);
         assertEquals("2, 3, 4", instance.toString());
+        System.out.println(instance.toString());
     }
     
     /**
