@@ -7,6 +7,7 @@ import java.util.ListIterator;
 
 /**
  * CircList implements a generic circularly linked list
+ *
  * @author Jason Travis
  */
 public class CircList<E> implements List {
@@ -60,9 +61,14 @@ public class CircList<E> implements List {
         return false;
     }
 
+    /**
+     * Returns an iterator over the elements
+     *
+     * @return an iterator
+     */
     @Override
     public Iterator iterator() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new Iterator();
     }
 
     /**
@@ -274,6 +280,53 @@ public class CircList<E> implements List {
 
         public void setNext(Node n) {
             this.next = n;
+        }
+    }
+
+    public class Iterator implements java.util.Iterator {
+
+        Node iter, prev;
+
+        public Iterator() {
+            iter = CircList.this.first;
+            prev = CircList.this.getNode(CircList.this.size - 1);
+        }
+
+        /**
+         * @return true if there are more elements
+         */
+        @Override
+        public boolean hasNext() {
+            return iter != null;
+        }
+
+        /**
+         * @return the next element in the iteration
+         */
+        @Override
+        public Object next() {
+            iter = iter.getNext();
+            prev = prev.getNext();
+            return iter.getElement();
+        }
+
+        /**
+         * Removes from the underlying collection the last element returned
+         */
+        @Override
+        public void remove() {
+            if (CircList.this.size == 1) {
+                // This is the last node, set pointers to null
+                CircList.this.first.setNext(null);
+                CircList.this.first = null;
+                iter = null;
+            } else {
+                // Remove the current node from the list
+                iter = iter.getNext();
+                prev.getNext().setNext(null);
+                prev.setNext(iter);
+            }
+            CircList.this.size--;
         }
     }
 }
