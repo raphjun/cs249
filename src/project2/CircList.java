@@ -1,9 +1,9 @@
 package project2;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.NoSuchElementException;
 
 /**
  * CircList implements a generic circularly linked list
@@ -285,11 +285,10 @@ public class CircList<E> implements List {
 
     public class Iterator implements java.util.Iterator {
 
-        Node iter, prev;
+        private Node ptr, prev;
 
         public Iterator() {
-            iter = CircList.this.first;
-            prev = CircList.this.getNode(CircList.this.size - 1);
+            this.prev = CircList.this.getNode(CircList.this.size - 1);
         }
 
         /**
@@ -297,7 +296,7 @@ public class CircList<E> implements List {
          */
         @Override
         public boolean hasNext() {
-            return iter != null;
+            return this.prev != null;
         }
 
         /**
@@ -305,9 +304,17 @@ public class CircList<E> implements List {
          */
         @Override
         public Object next() {
-            iter = iter.getNext();
-            prev = prev.getNext();
-            return iter.getElement();
+            if (this.prev == null) {
+                throw new NoSuchElementException();
+            }
+            if (this.ptr == null) {
+                // The first call to next should return the first element
+                this.ptr = this.prev.getNext();
+            } else {
+                this.ptr = this.ptr.getNext();
+                this.prev = this.prev.getNext();
+            }
+            return this.ptr.getElement();
         }
 
         /**
@@ -315,16 +322,22 @@ public class CircList<E> implements List {
          */
         @Override
         public void remove() {
+            if (this.prev == null || this.ptr == null) {
+                // the next method has not yet been called, or the remove method
+                // has already been called after the last call to the next method
+                throw new IllegalStateException();
+            }
             if (CircList.this.size == 1) {
                 // This is the last node, set pointers to null
                 CircList.this.first.setNext(null);
                 CircList.this.first = null;
-                iter = null;
+                this.ptr = null;
+                this.prev = null;
             } else {
                 // Remove the current node from the list
-                iter = iter.getNext();
-                prev.getNext().setNext(null);
-                prev.setNext(iter);
+                this.prev.setNext(this.ptr.getNext());
+                this.ptr.setNext(null);
+                this.ptr = null;
             }
             CircList.this.size--;
         }

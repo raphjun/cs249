@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.NoSuchElementException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -66,7 +67,9 @@ public class CircListTest {
         Object e1 = new Object(), e2 = new Object(), e3 = new Object();
         CircList instance = new CircList();
         assertFalse("It should return false when the list is instantiated", instance.contains(e1));
-        instance.add(e1); instance.add(e2); instance.add(e3);
+        instance.add(e1);
+        instance.add(e2);
+        instance.add(e3);
         assertFalse("It should return false when the list does not contain the object", instance.contains(new Object()));
         assertTrue("It should return true when the first item is the object", instance.contains(e1));
         assertTrue("It should return true when the middle item is the object", instance.contains(e2));
@@ -79,12 +82,36 @@ public class CircListTest {
     @Test
     public void testIterator() {
         System.out.println("iterator");
+        Object e1 = new Object(), e2 = new Object(), e3 = new Object();
         CircList instance = new CircList();
-        Iterator expResult = null;
-        Iterator result = instance.iterator();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+        assertFalse("hasNext should return false when the list is empty", instance.iterator().hasNext());
+        try {
+            instance.iterator().next();
+            fail("next should throw a NoSuchElementException if the list is empty");
+        } catch (NoSuchElementException e) {
+            // success
+        }
+        try {
+            instance.iterator().remove();
+            fail("remove should throw an IllegalStateException if the next method has not yet been called");
+        } catch (IllegalStateException e) {
+            // success
+        }
+
+        instance.add(e1);
+        instance.add(e2);
+        instance.add(e3);
+        Iterator iter = instance.iterator();
+        assertTrue("hasNext should return true when the list is not empty", iter.hasNext());
+        assertEquals("next should return the next element in the iteration", e1, iter.next());
+        iter.remove();
+        try {
+            iter.remove();
+            fail("remove should throw an IllegalStateException if remove has already been called since the last call to the next method");
+        } catch (IllegalStateException e) {
+            // success
+        }
     }
 
     /**
@@ -96,8 +123,10 @@ public class CircListTest {
         CircList instance = new CircList();
         assertArrayEquals("It should return an empty array when instantiated", new Object[0], instance.toArray());
         Object e1 = new Object(), e2 = new Object(), e3 = new Object();
-        Object[] expResult = new Object[] {e1, e2, e3};
-        instance.add(e1); instance.add(e2); instance.add(e3);
+        Object[] expResult = new Object[]{e1, e2, e3};
+        instance.add(e1);
+        instance.add(e2);
+        instance.add(e3);
         assertArrayEquals("It should return an array containing all elements in order", expResult, instance.toArray());
     }
 
@@ -291,7 +320,9 @@ public class CircListTest {
         CircList instance = new CircList();
         assertNull("It should return null when the list is empty", instance.remove(0));
         assertNull("It should not wraparound when the list is empty", instance.remove(-1));
-        instance.add(e1); instance.add(e2); instance.add(e3);
+        instance.add(e1);
+        instance.add(e2);
+        instance.add(e3);
         assertNull("It should return null when the index does not exist", instance.remove(3));
         assertEquals("It should return the third element", e3, instance.remove(2));
         assertEquals("It should return the second element", e2, instance.remove(1));

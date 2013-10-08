@@ -64,13 +64,14 @@ public class CircleGame {
     public int play() {
         Iterator iter = circle.iterator();
         Integer lastRemoved = -1;
-        // Shift iterator to the starting position
-        for (int i = 0; i < this.start; i++) {
+        // Shift the iterator to the starting position
+        for (int i = 1; i < this.start; i++) {
             iter.next();
         }
         System.out.println("\nStarting Circle Game with " + circle.size() + " people starting with position " + this.start + " and a count of " + this.count);
         while (iter.hasNext()) {
-            for (int i = 0; i < this.count - 1; i++) {
+            // Remove the next person
+            for (int i = 1; i <= this.count; i++) {
                 lastRemoved = (Integer) iter.next();
             }
             iter.remove();
