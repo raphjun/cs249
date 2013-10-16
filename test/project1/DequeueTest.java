@@ -58,6 +58,8 @@ public class DequeueTest {
     @Test
     public void testInsertLeft() {
         System.out.println("insertLeft");
+        assertFalse("It should return false when the object is null", intInstance.insertLeft(null));
+        assertTrue("It should remain empty when the object is null", intInstance.isEmpty());
         System.out.println("It should be full when filled to capacity from the left");
         for(int i=0; i<3; i++) {
             if(!intInstance.insertLeft(integers[i])) fail("insertLeft returned false when " + (i+1) + "/3 items were inserted.");
@@ -75,6 +77,8 @@ public class DequeueTest {
     @Test
     public void testInsertRight() {
         System.out.println("insertRight");
+        assertFalse("It should return false when the object is null", intInstance.insertRight(null));
+        assertTrue("It should remain empty when the object is null", intInstance.isEmpty());
         System.out.println("It should be full when filled to capacity from the right");
         for(int i=0; i<3; i++) {
             if(intInstance.isFull()) fail("isFull returned true when " + (i+1) + "/3 items were inserted.");

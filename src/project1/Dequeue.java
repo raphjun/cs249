@@ -23,7 +23,8 @@ public class Dequeue<E> {
      * @return true if successful
      */
     public boolean insertLeft(E e) {
-        if (isFull()) {
+        if (isFull() || e == null) {
+            // The queue is full or the object is invalid
             return false;
         }
         if (isEmpty()) {
@@ -48,7 +49,8 @@ public class Dequeue<E> {
      * @return true if successful
      */
     public boolean insertRight(E e) {
-        if (isFull()) {
+        if (isFull() || e == null) {
+            // The queue is full or the object is invalid
             return false;
         }
         if (isEmpty()) {
