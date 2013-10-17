@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package project2;
 
 import org.junit.After;
@@ -11,7 +7,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author jason
+ * @author Jason Travis
  */
 public class StackTest {
     

@@ -13,7 +13,7 @@ import java.util.NoSuchElementException;
 public class CircList<E> implements List {
 
     private int size;
-    private Node first;
+    private Node<E> first;
 
     public CircList() {
         this.size = 0;
@@ -238,7 +238,7 @@ public class CircList<E> implements List {
     }
 
     /**
-     * Returns the node before the given node
+     * Returns the given node
      *
      * @param n a node in the list
      * @return the node before the given node
