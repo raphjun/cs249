@@ -44,15 +44,33 @@ public class LinkedMatrix {
         this.first = new Node(0, 0);
 
         // Initialize rows
-        Node rowStart = this.first, current = this.first;
+        Node rowStart = this.first, current;
         for (int row = 0; row < this.yDim; row++) {
-            current.down = new Node(0, row + 1);
-            // Initialize columns
+            // Move to the start of the row
+            current = rowStart;
+            // Initialize and link the columns
             for (int column = 0; column < this.xDim; column++) {
                 current = (current.right = new Node(column + 1, row));
-                current.down = new Node(column, row + 1);
             }
-            current = (rowStart = rowStart.down);
+            // Initialize the next row if this is not the last row iteration
+            if (row < this.yDim - 1) {
+                rowStart = (rowStart.down = new Node(0, row + 1));
+            }
+        }
+        // Link the rows
+        Node prevColumnStart = this.first, columnStart = this.first.right, prev = prevColumnStart;
+        for (int column = 1; column < this.xDim; column++) {
+            // Move to the start of the column
+            current = columnStart;
+            prev = prevColumnStart;
+            // Link the column rows using the previous column references
+            for (int row = 0; row < this.yDim - 1; row++) {
+                current.down = (prev = prev.down).right;
+                current = current.down;
+            }
+            // Move to the next column
+            columnStart = columnStart.right;
+            prevColumnStart = prevColumnStart.right;
         }
     }
 
@@ -153,13 +171,13 @@ public class LinkedMatrix {
      */
     public void insert(int x, int y, int content) {
         Node n = first;
-        // Move to the node y coordinate
-        for (int i = 0; i < y; i++) {
-            n = n.down;
-        }
         // Move to the node x coordinate
         for (int i = 0; i < x; i++) {
             n = n.right;
+        }
+        // Move to the node y coordinate
+        for (int i = 0; i < y; i++) {
+            n = n.down;
         }
         // Insert the given value
         n.element = content;
