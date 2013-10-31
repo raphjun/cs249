@@ -26,14 +26,12 @@ public class LinkedMatrix {
     private int xDim, yDim;
 
     public static void main(String[] args) {
-        LinkedMatrix matrix = new LinkedMatrix(5, 2);
+        LinkedMatrix matrix = new LinkedMatrix(3, 3);
         matrix.display(3, true);
-        System.out.println();
         matrix.fill(42);
         matrix.display(3, true);
-        System.out.println();
         matrix.insert(1, 1, 100);
-        matrix.display(3, false);
+        matrix.display(3, true);
     }
 
     /**
@@ -43,23 +41,31 @@ public class LinkedMatrix {
     public LinkedMatrix(int xDim, int yDim) {
         this.xDim = xDim;
         this.yDim = yDim;
-        // Initialize first to a pre-matrix node
         this.first = new Node(0, 0);
 
         // Initialize rows
-        Node rowStart = this.first, current;
+        Node rowStart = this.first, current = this.first;
         for (int row = 0; row < this.yDim; row++) {
-            // Create a new row
-            rowStart = (rowStart.down = new Node(0, row));
-            // Move to the start of the row
-            current = rowStart;
+            current.down = new Node(0, row + 1);
             // Initialize columns
-            for (int column = 0; column < this.xDim - 1; column++) {
+            for (int column = 0; column < this.xDim; column++) {
                 current = (current.right = new Node(column + 1, row));
+                current.down = new Node(column, row + 1);
             }
+            current = (rowStart = rowStart.down);
         }
-        // Move from the pre-matrix node to the first node of the matrix
-        this.first = this.first.down;
+    }
+
+    private Node initRow(Node current, int x, int y) {
+        Node n = new Node(x, y);
+        n.down = new Node(x, y + 1);
+        current.right = n;
+        current.down.right = n.down;
+        if (x == this.xDim - 1) {
+            return n;
+        }
+        n.right = initRow(n, x + 1, y);
+        return n;
     }
 
     /**
@@ -77,6 +83,7 @@ public class LinkedMatrix {
             // Move to the start of the row
             current = rowStart;
             // Print and sum the row first element
+            // Sum the first column element
             System.out.print(String.format(" %0" + pad + "d", current.element));
             rowSums[row] += current.element;
             colSums[0] += current.element;
@@ -111,6 +118,7 @@ public class LinkedMatrix {
             for (int n : colSums) {
                 System.out.print(String.format(" %0" + pad + "d", n));
             }
+            System.out.println();
         }
         System.out.println();
     }
@@ -127,7 +135,7 @@ public class LinkedMatrix {
             current = rowStart;
             current.element = value;
             // Set the value of each element
-            for (int column = 0; column < this.xDim-1; column++) {
+            for (int column = 0; column < this.xDim - 1; column++) {
                 current = current.right;
                 current.element = value;
             }
@@ -145,13 +153,13 @@ public class LinkedMatrix {
      */
     public void insert(int x, int y, int content) {
         Node n = first;
-        // Move to the node x coordinate
-        for (int i = 0; i < x-1; i++) {
-            n = n.right;
-        }
         // Move to the node y coordinate
-        for (int i = 0; i < y-1; i++) {
+        for (int i = 0; i < y; i++) {
             n = n.down;
+        }
+        // Move to the node x coordinate
+        for (int i = 0; i < x; i++) {
+            n = n.right;
         }
         // Insert the given value
         n.element = content;
