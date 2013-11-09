@@ -20,18 +20,89 @@
  */
 package project3;
 
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
 public class LinkedMatrix {
 
     private Node first;
-    private int xDim, yDim;
+    // Set public to provide a lazy accessor for the main interface
+    public int xDim, yDim;
 
     public static void main(String[] args) {
-        LinkedMatrix matrix = new LinkedMatrix(3, 3);
-        matrix.display(3, true);
-        matrix.fill(42);
-        matrix.display(3, true);
-        matrix.insert(1, 1, 100);
-        matrix.display(3, true);
+        int width = 1, height = 1;
+        Scanner in = new Scanner(System.in);
+        // Ask the user to for the matrix width and height
+        try {
+            System.out.println("Enter the matrix width");
+            width = in.nextInt();
+            System.out.println("Enter the matrix height");
+            height = in.nextInt();
+            if(width < 1 || height < 1) {
+                System.out.println("The width and height cannot be less than 1");
+                System.exit(1);
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Expected an integer");
+            System.exit(1);
+        } catch (Exception e) {
+            System.err.println("Unexpected error: " + e.getMessage());
+            System.exit(1);
+        }
+        LinkedMatrix matrix = new LinkedMatrix(width, height);
+        // Ask the user which method(s) they want to run
+        while (true) {
+            System.out.println("Enter '1' to insert a specific value at a specific location");
+            System.out.println("Enter '2' to fill the matrix with a given value");
+            System.out.println("Enter '3' to display the matrix with row and column sums");
+            System.out.println("Enter '4' to display the matrix");
+            System.out.println("Enter '5' to quit");
+            try {
+                int action = in.nextInt();
+                switch (action) {
+                    case 1:
+                        System.out.println("Enter the x coordinate [0-" + (matrix.xDim - 1) + "]");
+                        int x = in.nextInt();
+                        if (action < 0 || action > matrix.xDim - 1) {
+                            System.out.println("Invalid x coordinate");
+                            continue;
+                        }
+                        System.out.println("Enter the y coordinate [0-" + (matrix.yDim - 1) + "]");
+                        int y = in.nextInt();
+                        if (action < 0 || action > matrix.yDim - 1) {
+                            System.out.println("Invalid y coordinate");
+                            continue;
+                        }
+                        System.out.println("Enter the value to insert at (" + x + ", " + y + ")");
+                        int v = in.nextInt();
+                        matrix.insert(x, y, v);
+                        break;
+                    case 2:
+                        System.out.println("Enter the value to fill the matrix");
+                        v = in.nextInt();
+                        matrix.fill(v);
+                        break;
+                    case 3:
+                        // Get the number of digits in the largest value of the default matrix
+                        int nDigits = String.valueOf(matrix.xDim*matrix.yDim).length();
+                        matrix.display(nDigits, true);
+                        break;
+                    case 4:
+                        // Get the number of digits in the largest value of the default matrix
+                        nDigits = String.valueOf(matrix.xDim*matrix.yDim).length();
+                        matrix.display(nDigits, false);
+                        break;
+                    default:
+                        System.out.println("Exiting");
+                        System.exit(0);
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Please enter a number");
+            } catch (Exception e) {
+                System.err.println("Unexpected error: " + e.getMessage());
+                System.exit(1);
+            }
+        }
     }
 
     /**
@@ -58,7 +129,7 @@ public class LinkedMatrix {
             }
         }
         // Link the rows
-        Node prevColumnStart = this.first, columnStart = this.first.right, prev = prevColumnStart;
+        Node prevColumnStart = this.first, columnStart = this.first.right, prev;
         for (int column = 1; column < this.xDim; column++) {
             // Move to the start of the column
             current = columnStart;
@@ -72,18 +143,6 @@ public class LinkedMatrix {
             columnStart = columnStart.right;
             prevColumnStart = prevColumnStart.right;
         }
-    }
-
-    private Node initRow(Node current, int x, int y) {
-        Node n = new Node(x, y);
-        n.down = new Node(x, y + 1);
-        current.right = n;
-        current.down.right = n.down;
-        if (x == this.xDim - 1) {
-            return n;
-        }
-        n.right = initRow(n, x + 1, y);
-        return n;
     }
 
     /**
