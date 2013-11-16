@@ -1,0 +1,384 @@
+package project4;
+
+import java.util.Stack;
+
+/**
+ *
+ * @author Jason Travis
+ * @param <E>
+ */
+public class BinarySearchTree<E extends Comparable<E>> {
+
+    public static void main(String[] args) {
+        BinarySearchTree<Student> btree = new BinarySearchTree();
+        btree.insert(new Student(4.0));
+        btree.insert(new Student(5.0));
+        btree.insert(new Student(3.0));
+        btree.displayTree();
+        Object result = btree.find(new Student(3.0));
+    }
+
+    private Node root;
+
+    public void insert(E key) {
+        insert_r(this.root, key);
+    }
+
+    /**
+     * insert_r recursively inserts an element TODO: The node is ignored if a
+     * node with the given key exists TODO: insert between two nodes
+     *
+     * @param n the current Node
+     * @param key the element id
+     * @param e the element
+     * @return the current Node
+     */
+    private Node insert_r(Node<E> n, E key) {
+        // Insert the node in a empty list
+        if (this.root == null) {
+            return this.root = new Node(key);
+        }
+        // Base case
+        if (n == null) {
+            return null;
+        }
+        // Insert left if the position is available and the key is less
+        if (key.compareTo(n.key) == -1 && insert_r(n.left, key) == null) {
+            n.left = new Node(key);
+            return n.left;
+        }
+        // Insert right if the position is available and the key is greater
+        if (key.compareTo(n.key) == 1 && insert_r(n.right, key) == null) {
+            n.right = new Node(key);
+            return n.right;
+        }
+        return n;
+    }
+
+    public E find(E key) {
+        Node n = find_r(this.root, key);
+        if (n == null) {
+            return null;
+        }
+        return (E) n.key;
+    }
+
+    /**
+     * find_r recursively searches for a Node with the given id
+     *
+     * @param n the current node
+     * @param key the id of the Node to find
+     * @return a Node with the given id or null if it doesn't exist
+     */
+    private Node find_r(Node<E> n, E key) {
+        // The list is empty
+        if (n == null) {
+            return null;
+        }
+        // Search the left branch
+        if (key.compareTo(n.key) == -1) {
+            return find_r(n.left, key);
+        }
+        // Search the right branch
+        if (key.compareTo(n.key) == 1) {
+            return find_r(n.right, key);
+        }
+        // Either this is a matching Node or it doesn't exist
+        return n;
+    }
+
+    // delete node with given key
+    public boolean delete(E key) {
+        // (assumes non-empty list)
+        Node<E> parent = root, current = root;
+        boolean isLeftChild = true;
+        while (current.key.compareTo(key) != 0) {
+            parent = current;
+            if (key.compareTo(current.key) == -1) {
+                isLeftChild = true;
+                current = current.left;
+            } else {
+                isLeftChild = false;
+                current = current.right;
+            }
+            if (current == null) {
+                return false;
+            }
+        }
+        // Found node to delete
+        // if no children, simply delete it
+        if (current.left == null && current.right == null) {
+            if (current == root) {
+                // if root, tree is empty
+                root = null;
+            } else if (isLeftChild) {
+                parent.left = null;
+            } else {
+                parent.right = null;
+            }
+        } // disconnect
+        // from parent
+        else if (current.right == null) {
+            // if no right child, replace with left subtree
+            if (current == root) {
+                root = current.left;
+            } else if (isLeftChild) {
+                parent.left = current.left;
+            } else {
+                parent.right = current.left;
+            }
+        } else if (current.left == null) {
+            // if no left child, replace with right subtree
+            if (current == root) {
+                root = current.right;
+            } else if (isLeftChild) {
+                parent.left = current.right;
+            } else {
+                parent.right = current.right;
+            }
+        } else {
+            // two children, so replace with inorder successor
+            // get successor of node to delete (current)
+            Node successor = getSuccessor(current);
+            // connect parent of current to successor instead
+            if (current == root) {
+                root = successor;
+            } else if (isLeftChild) {
+                parent.left = successor;
+            } else {
+                parent.right = successor;
+            }
+            // connect successor to current’s left child
+            successor.left = current.left;
+        }
+        // (successor cannot have a left child)
+        return true;
+    }
+
+    // returns node with next-highest value after delNode
+    // goes to right child, then right child’s left descendents
+    private Node getSuccessor(Node delNode) {
+        Node successorParent = delNode;
+        Node successor = delNode;
+        Node current = delNode.right;
+        // go to right child until no more
+        while (current != null) {
+            // left children,
+            successorParent = successor;
+            successor = current;
+            current = current.left;
+            // go to left child
+        }
+        // if successor not right child
+        if (successor != delNode.right) {
+            // make connections
+            successorParent.right = successor.right;
+            successor.right = delNode.right;
+        }
+        return successor;
+    }
+
+    public void displayTree() {
+        Stack globalStack = new Stack();
+        globalStack.push(root);
+        int nBlanks = 32;
+        boolean isRowEmpty = false;
+        System.out.println("......................................................");
+        while (isRowEmpty == false) {
+            Stack localStack = new Stack();
+            isRowEmpty = true;
+            for (int j = 0; j < nBlanks; j++) {
+                System.out.print(" ");
+            }
+            while (globalStack.isEmpty() == false) {
+                Node temp = (Node) globalStack.pop();
+                if (temp != null) {
+                    System.out.print(temp.key.toString());
+                    localStack.push(temp.left);
+                    localStack.push(temp.right);
+                    if (temp.left != null || temp.right != null) {
+                        isRowEmpty = false;
+                    }
+                } else {
+                    System.out.print(
+                            "--");
+                    localStack.push(null);
+                    localStack.push(null);
+                }
+                for (int j = 0; j < nBlanks * 2 - 2; j++) {
+                    System.out.print(" ");
+                }
+            } // end while globalStack not empty
+            System.out.println();
+            nBlanks /= 2;
+            while (localStack.isEmpty() == false) {
+                globalStack.push(localStack.pop());
+            }
+        } // end while isRowEmpty is false
+        System.out.println("......................................................");
+    }
+
+
+    /*
+     protected Node root;
+
+     public void insert(int id, E e) {
+     insert_r(this.root, id, e);
+     }
+
+     /**
+     * insert_r recursively inserts an element TODO: The node is ignored if a
+     * node with the given key exists TODO: insert between two nodes
+     *
+     * @param n the current Node
+     * @param key the element id
+     * @param e the element
+     * @return the current Node
+     */
+    /*    private Node insert_r(Node n, int key, E e) {
+     // Insert the node in a empty list
+     if (this.root == null) {
+     return this.root = new Node(key, e);
+     }
+     // Base case
+     if (n == null) {
+     return null;
+     }
+     // Insert left if the position is available and the id is less
+     if (key < n.key && insert_r(n.left, key, e) == null) {
+     n.left = new Node(key, e);
+     return n.left;
+     }
+     // Insert right if the position is available and the id is greater
+     if (key > n.key && insert_r(n.right, key, e) == null) {
+     n.right = new Node(key, e);
+     return n.right;
+     }
+     return n;
+     }
+
+     public E find(int id) {
+     Node n = find_r(this.root, id);
+     if (n == null) {
+     return null;
+     }
+     return (E) n.e;
+     }
+
+     /**
+     * find_r recursively searches for a Node with the given id
+     *
+     * @param n the current node
+     * @param id the id of the Node to find
+     * @return a Node with the given id or null if it doesn't exist
+     */
+    /*    private Node find_r(Node n, int id) {
+     // The list is empty
+     if (n == null) {
+     return null;
+     }
+     // Search the left branch
+     if (id < n.key) {
+     return find_r(n.left, id);
+     }
+     // Search the right branch
+     if (id > n.key) {
+     return find_r(n.right, id);
+     }
+     // Either this is a matching Node or it doesn't exist
+     return n;
+     }
+
+     public void delete(int id) {
+     delete_r(this.root, id);
+     }
+
+     private Node delete_r(Node n, int key) {
+     boolean onLeft = true;
+     Node child = null;
+     // The list is empty
+     if (n == null) {
+     return null;
+     }
+     // Search the left branch
+     if (key < n.key) {
+     child = delete_r(n.left, key);
+     }
+     // Search the right branch
+     if (key > n.key) {
+     child = delete_r(n.right, key);
+     onLeft = false;
+     }
+     // Found it
+     if (key == n.key) {
+     child = n;
+     }
+     // The Node does not exist
+     if (child == null) {
+     return null;
+     }
+
+     if (child.left == null && child.right == null) {
+     // Simple case: the child has no children
+     // Determine which branch the child was in and set it to null
+     if (onLeft) {
+     n.left = null;
+     } else {
+     n.right = null;
+     }
+     } else if (child.left == null || child.right == null) {
+     // Moderate case: the child has one child
+     // Determine which branch the child was in and set it to child's child
+     if (onLeft) {
+     n.left = (n.left.left != null ? n.left.left : n.left.right);
+     } else {
+     n.right = (n.right.left != null ? n.right.left : n.right.right);
+     }
+     } else {
+     // Hard case: the child has two children
+     // Pluck out the successor (Node with the next largest id)
+     Node successor;
+     if (child.right.left != null) {
+     // The children have children
+     // Follow the left branches of the right child to find the successor
+     Node successorParent = child.right;
+     while (successorParent.left.left != null) {
+     successorParent = successorParent.left;
+     }
+     successor = successorParent.left;
+     successorParent.left = null;
+     } else {
+     // The right child is the successor
+     successor = child.right;
+     child.right = null;
+     }
+     // Point the successor to the child's children
+     successor.left = child.left;
+     // This would reference itself and lose any right children
+     //successor.right = child.right;
+     // Clear the child's references
+     child.left = null;
+     child.right = null;
+     // Determine which branch the child was in and set it to the successor
+     if (onLeft) {
+     n.left = successor;
+     } else {
+     n.right = successor;
+     }
+     }
+     return n;
+     }
+
+     protected class Node {
+
+     Node left, right;
+     Object e;
+     int key;
+
+     Node(int id, E e) {
+     this.key = id;
+     this.e = e;
+     }
+     }
+     */
+}
