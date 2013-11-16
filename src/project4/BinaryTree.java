@@ -1,12 +1,28 @@
 package project4;
 
+import java.util.LinkedList;
+
 /**
  * BinaryTree creates a binary tree from the characters of a String
+ *
  * @author Jason Travis
  */
 public class BinaryTree {
 
-    private Node root;
+    public static void main(String[] args) {
+        BinaryTree btree = new BinaryTree();
+        //btree.insert("abcdefghij");
+        btree.insert("lnhyYLN");
+        btree.levelorder(btree.root);
+        System.out.println();
+        btree.preOrder(btree.root);
+        System.out.println();
+        btree.inOrder(btree.root);
+        System.out.println();
+        btree.postOrder(btree.root);
+    }
+
+    public Node root;
 
     /**
      * insert recursively creates a tree from the characters of the given string
@@ -49,6 +65,44 @@ public class BinaryTree {
         // Recursively insert right branch
         insert_r(n.right, s, 2 * index + 2);
         return n;
+    }
+
+    public void inOrder(Node n) {
+        if (n != null) {
+            inOrder(n.left);
+            System.out.print(n.c + " ");
+            inOrder(n.right);
+        }
+    }
+    
+    public void preOrder(Node n) {
+        if (n != null) {
+            System.out.print(n.c + " ");
+            preOrder(n.left);
+            preOrder(n.right);
+        }
+    }
+    public void postOrder(Node n) {
+        if (n != null) {
+            postOrder(n.left);
+            postOrder(n.right);
+            System.out.print(n.c + " ");
+        }
+    }
+
+    public void levelorder(Node root) {
+        LinkedList<Node> q = new LinkedList();
+        q.addLast(root);
+        while (!q.isEmpty()) {
+            Node n = q.removeFirst();
+            System.out.print(n.c + " ");
+            if (n.left != null) {
+                q.addLast(n.left);
+            }
+            if (n.right != null) {
+                q.addLast(n.right);
+            }
+        }
     }
 
     private class Node {
