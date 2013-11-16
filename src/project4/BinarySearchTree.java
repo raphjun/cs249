@@ -26,7 +26,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
 
     /**
      * insert_r recursively inserts an element TODO: The node is ignored if a
-     * node with the given key exists TODO: insert between two nodes
+     * node with the given key exists
      *
      * @param n the current Node
      * @param key the element id
@@ -64,7 +64,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
     }
 
     /**
-     * find_r recursively searches for a Node with the given id
+     * find_r recursively searches for a Node with the given key
      *
      * @param n the current node
      * @param key the id of the Node to find
@@ -200,8 +200,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
                         isRowEmpty = false;
                     }
                 } else {
-                    System.out.print(
-                            "--");
+                    System.out.print("--");
                     localStack.push(null);
                     localStack.push(null);
                 }
@@ -218,167 +217,14 @@ public class BinarySearchTree<E extends Comparable<E>> {
         System.out.println("......................................................");
     }
 
+    private class Node<E extends Comparable<E>> {
 
-    /*
-     protected Node root;
+        Node left, right;
+        E key;
 
-     public void insert(int id, E e) {
-     insert_r(this.root, id, e);
-     }
+        public Node(E e) {
+            this.key = e;
+        }
+    }
 
-     /**
-     * insert_r recursively inserts an element TODO: The node is ignored if a
-     * node with the given key exists TODO: insert between two nodes
-     *
-     * @param n the current Node
-     * @param key the element id
-     * @param e the element
-     * @return the current Node
-     */
-    /*    private Node insert_r(Node n, int key, E e) {
-     // Insert the node in a empty list
-     if (this.root == null) {
-     return this.root = new Node(key, e);
-     }
-     // Base case
-     if (n == null) {
-     return null;
-     }
-     // Insert left if the position is available and the id is less
-     if (key < n.key && insert_r(n.left, key, e) == null) {
-     n.left = new Node(key, e);
-     return n.left;
-     }
-     // Insert right if the position is available and the id is greater
-     if (key > n.key && insert_r(n.right, key, e) == null) {
-     n.right = new Node(key, e);
-     return n.right;
-     }
-     return n;
-     }
-
-     public E find(int id) {
-     Node n = find_r(this.root, id);
-     if (n == null) {
-     return null;
-     }
-     return (E) n.e;
-     }
-
-     /**
-     * find_r recursively searches for a Node with the given id
-     *
-     * @param n the current node
-     * @param id the id of the Node to find
-     * @return a Node with the given id or null if it doesn't exist
-     */
-    /*    private Node find_r(Node n, int id) {
-     // The list is empty
-     if (n == null) {
-     return null;
-     }
-     // Search the left branch
-     if (id < n.key) {
-     return find_r(n.left, id);
-     }
-     // Search the right branch
-     if (id > n.key) {
-     return find_r(n.right, id);
-     }
-     // Either this is a matching Node or it doesn't exist
-     return n;
-     }
-
-     public void delete(int id) {
-     delete_r(this.root, id);
-     }
-
-     private Node delete_r(Node n, int key) {
-     boolean onLeft = true;
-     Node child = null;
-     // The list is empty
-     if (n == null) {
-     return null;
-     }
-     // Search the left branch
-     if (key < n.key) {
-     child = delete_r(n.left, key);
-     }
-     // Search the right branch
-     if (key > n.key) {
-     child = delete_r(n.right, key);
-     onLeft = false;
-     }
-     // Found it
-     if (key == n.key) {
-     child = n;
-     }
-     // The Node does not exist
-     if (child == null) {
-     return null;
-     }
-
-     if (child.left == null && child.right == null) {
-     // Simple case: the child has no children
-     // Determine which branch the child was in and set it to null
-     if (onLeft) {
-     n.left = null;
-     } else {
-     n.right = null;
-     }
-     } else if (child.left == null || child.right == null) {
-     // Moderate case: the child has one child
-     // Determine which branch the child was in and set it to child's child
-     if (onLeft) {
-     n.left = (n.left.left != null ? n.left.left : n.left.right);
-     } else {
-     n.right = (n.right.left != null ? n.right.left : n.right.right);
-     }
-     } else {
-     // Hard case: the child has two children
-     // Pluck out the successor (Node with the next largest id)
-     Node successor;
-     if (child.right.left != null) {
-     // The children have children
-     // Follow the left branches of the right child to find the successor
-     Node successorParent = child.right;
-     while (successorParent.left.left != null) {
-     successorParent = successorParent.left;
-     }
-     successor = successorParent.left;
-     successorParent.left = null;
-     } else {
-     // The right child is the successor
-     successor = child.right;
-     child.right = null;
-     }
-     // Point the successor to the child's children
-     successor.left = child.left;
-     // This would reference itself and lose any right children
-     //successor.right = child.right;
-     // Clear the child's references
-     child.left = null;
-     child.right = null;
-     // Determine which branch the child was in and set it to the successor
-     if (onLeft) {
-     n.left = successor;
-     } else {
-     n.right = successor;
-     }
-     }
-     return n;
-     }
-
-     protected class Node {
-
-     Node left, right;
-     Object e;
-     int key;
-
-     Node(int id, E e) {
-     this.key = id;
-     this.e = e;
-     }
-     }
-     */
 }
