@@ -3,7 +3,8 @@ package project4;
 import java.util.Stack;
 
 /**
- *
+ * BinarySearchTree implements a generic binary search tree for objects that
+ * implement the Comparable interface.
  * @author Jason Travis
  * @param <E>
  */
@@ -14,8 +15,23 @@ public class BinarySearchTree<E extends Comparable<E>> {
         btree.insert(new Student(4.0));
         btree.insert(new Student(5.0));
         btree.insert(new Student(3.0));
+        btree.insert(new Student(10.0));
+        btree.insert(new Student(9.0));
+        btree.insert(new Student(14.0));
+        btree.insert(new Student(0.0));
+        btree.insert(new Student(-1.0));
+        btree.insert(new Student(2.0));
+        btree.insert(new Student(3.5));
+        btree.insert(new Student(4.5));
+        btree.insert(new Student(4.25));
         btree.displayTree();
-        Object result = btree.find(new Student(3.0));
+        System.out.print("Searching for Student with 3.0 GPA: ");
+        System.out.println(btree.find(new Student(3.0)) != null);
+        System.out.println("Remove Student with 4.0 GPA");
+        btree.delete(new Student(4.0));
+        btree.displayTree();
+        System.out.print("Searching for Student with 4.0 GPA: ");
+        System.out.println(btree.find(new Student(4.0)) != null);
     }
 
     private Node root;
@@ -87,8 +103,13 @@ public class BinarySearchTree<E extends Comparable<E>> {
         return n;
     }
 
-    // delete node with given key
+    /**
+     * delete removes a node with the given key
+     * @param key
+     * @return true if successful
+     */
     public boolean delete(E key) {
+        if(this.root == null) return false;
         // (assumes non-empty list)
         Node<E> parent = root, current = root;
         boolean isLeftChild = true;
@@ -172,7 +193,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
         // if successor not right child
         if (successor != delNode.right) {
             // make connections
-            successorParent.right = successor.right;
+            successorParent.left = successor.right;
             successor.right = delNode.right;
         }
         return successor;
