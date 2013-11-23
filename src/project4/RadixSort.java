@@ -2,12 +2,42 @@ package project4;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Random;
 
 /**
  *
  * @author Jason Travis
  */
 public class RadixSort {
+    
+    public static void main(String[] args) {
+        Random rnd = new Random();
+        RadixSort rSort = new RadixSort();
+        rSort.sortRandom(rnd);
+        rSort.sortRandom(rnd);
+        rSort.sortRandom(rnd);
+    }
+    
+    /**
+     * Create a list with 5-10 elements where each is between +/-1000 and sort it
+     */
+    public void sortRandom(Random rnd) {
+        LinkedList<Integer> list = new LinkedList();
+        int size = 5 + (int)(rnd.nextFloat()*5 + 1);
+        for(int i = 0; i < size; i++) {
+            list.add((int)(rnd.nextFloat()*1000) * (rnd.nextBoolean() ? -1 : 1));
+        }
+        // Print the unsorted list
+        System.out.println("Unsorted:");
+        for(int n : list) System.out.print(n + " ");
+        System.out.println();
+        // Sort the list
+        list = this.binarySort(list);
+        // Print the sorted list
+        System.out.println("Sorted:");
+        for(int n : list) System.out.print(n + " ");
+        System.out.println("\n");
+    }
     
     /**
      * binarySort performs a binary radix sort on a list of 32bit integers
