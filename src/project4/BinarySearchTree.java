@@ -5,34 +5,11 @@ import java.util.Stack;
 /**
  * BinarySearchTree implements a generic binary search tree for objects that
  * implement the Comparable interface.
+ *
  * @author Jason Travis
  * @param <E>
  */
 public class BinarySearchTree<E extends Comparable<E>> {
-
-    public static void main(String[] args) {
-        BinarySearchTree<Student> btree = new BinarySearchTree();
-        btree.insert(new Student(4.0));
-        btree.insert(new Student(5.0));
-        btree.insert(new Student(3.0));
-        btree.insert(new Student(10.0));
-        btree.insert(new Student(9.0));
-        btree.insert(new Student(14.0));
-        btree.insert(new Student(0.0));
-        btree.insert(new Student(-1.0));
-        btree.insert(new Student(2.0));
-        btree.insert(new Student(3.5));
-        btree.insert(new Student(4.5));
-        btree.insert(new Student(4.25));
-        btree.displayTree();
-        System.out.print("Searching for Student with 3.0 GPA: ");
-        System.out.println(btree.find(new Student(3.0)) != null);
-        System.out.println("Remove Student with 4.0 GPA");
-        btree.delete(new Student(4.0));
-        btree.displayTree();
-        System.out.print("Searching for Student with 4.0 GPA: ");
-        System.out.println(btree.find(new Student(4.0)) != null);
-    }
 
     private Node root;
 
@@ -105,11 +82,14 @@ public class BinarySearchTree<E extends Comparable<E>> {
 
     /**
      * delete removes a node with the given key
+     *
      * @param key
      * @return true if successful
      */
     public boolean delete(E key) {
-        if(this.root == null) return false;
+        if (this.root == null) {
+            return false;
+        }
         // (assumes non-empty list)
         Node<E> parent = root, current = root;
         boolean isLeftChild = true;
