@@ -20,6 +20,8 @@ public class WarshallApp {
         theGraph.adjMatDisplay();   // display adj matrix
         theGraph.warshall();        // do the algorithm
         System.out.println();
+        System.out.println("Transitive closure matrix");
+        theGraph.adjMatDisplay();   // display adj matrix
     }  // end main()
 // -------------------------------------------------------------
 }  // end class WarshallApp

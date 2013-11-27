@@ -45,6 +45,43 @@ class Graph {
         System.out.print(vertexList[v].label);
     }
 
+    void startV(int i) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    void findCycle() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    void adjMatDisplay() {
+        for (int y = 0; y < this.MAX_VERTS; y++) {
+            for (int x = 0; x < this.MAX_VERTS; x++) {
+                System.out.print(this.adjMat[y][x]);
+            }
+            System.out.println();
+        }
+    }
+
+    /**
+     * The Warshall algorithm modifies the adjacency matrix into a transitive
+     * closure. The transitive closure shows whether a path exists between two
+     * points regardless of the number of points in between.
+     */
+    void warshall() {
+        for (int y = 0; y < this.MAX_VERTS; y++) {
+            for (int x = 0; x < this.MAX_VERTS; x++) {
+                if (this.adjMat[y][x] == 1) {
+                    for (int z = 0; z < this.MAX_VERTS; z++) {
+                        if (this.adjMat[z][y] == 1) {
+                            this.adjMat[z][x] = 1;
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+
     private class Vertex {
 
         // label (e.g. ‘A’)
