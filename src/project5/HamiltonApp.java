@@ -19,7 +19,7 @@ public class HamiltonApp {
         theGraph.addEdge(2, 4);   // CE
         theGraph.addEdge(3, 4);   // DE
 
-        theGraph.startV(2);          // set starting vertex
-        theGraph.findCycle();        // find Hamiltonian cycle
+        //theGraph.startV(2);          // set starting vertex
+        theGraph.findCycle(2);        // find Hamiltonian cycle
     }  // end main()
 }  // end class HamiltonApp
