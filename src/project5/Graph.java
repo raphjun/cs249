@@ -50,46 +50,70 @@ class Graph {
     /**
      * findCycle prints the Vertex labels of a Hamiltonian Cycle starting with
      * the given Vertex
+     *
      * @param i index of the starting Vertex
      */
     public void findCycle(int i) {
         Stack<Vertex> path = new Stack();
         path.push(this.vertexList[i]);
-        if (!findCycle_r(path, i, 0)) {
+        this.vertexList[i].wasVisited = true;
+        if (!findCycle_r(path, i, i)) {
+            System.out.println("No Hamiltonian Cycle found");
             // No cycle found, clear the stack
             path.pop();
+        } else {
+            path.push(this.vertexList[i]);
         }
         // Display the cycle
         for (Vertex v : path) {
             System.out.print(v.label + " ");
         }
         System.out.println();
+        // Reset the visited state of the vertices
+        for(Vertex v : this.vertexList) {
+            // For each vertex that was initialized
+            if(v == null) break;
+            v.wasVisited = false;
+        }
     }
 
     /**
      * findCycle_r recursively searches for a Hamiltonian Cycle
+     *
      * @param path a stack of Vertices in the current path
      * @param start index of the starting Vertex
      * @param vertex index of the current Vertex
      * @return true if a Hamiltonian Cycle was found
      */
     private boolean findCycle_r(Stack path, int start, int vertex) {
-        for (int i = 0; i < this.MAX_VERTS; i++) {
-            // Find an edge that wasn't visited
-            if (this.adjMat[vertex][i] > 0 && !this.vertexList[i].wasVisited) {
-                this.vertexList[i].wasVisited = true;
-                path.push(this.vertexList[i]);
-                // Base case
-                if (start == i) {
-                    return true;
+        for (int i = 0; i < this.nVerts; i++) {
+            // Find an edge
+            if (this.adjMat[vertex][i] > 0) {
+                // Find an Vertex that wasn't visited
+                if (!this.vertexList[i].wasVisited) {
+                    this.vertexList[i].wasVisited = true;
+                    path.push(this.vertexList[i]);
+                    // This path results in a cycle
+                    if (findCycle_r(path, start, i)) {
+                        return true;
+                    }
+                    // This path doesn't result in a cycle
+                    this.vertexList[i].wasVisited = false;
+                    path.pop();
+                } else if (start == i) {
+                    // This path returns to the starting position. If all the
+                    // the vertices were visited, we're done.
+                    boolean allVisited = true;
+                    for (Vertex v : this.vertexList) {
+                        if (v != null && !v.wasVisited) {
+                            allVisited = false;
+                            break;
+                        }
+                    }
+                    if (allVisited) {
+                        return true;
+                    }
                 }
-                // This path results in a cycle
-                if (findCycle_r(path, start, i)) {
-                    return true;
-                }
-                // This path doesn't result in a cycle
-                this.vertexList[i].wasVisited = false;
-                path.pop();
             }
         }
         return false;
@@ -119,6 +143,7 @@ class Graph {
                     for (int z = 0; z < this.MAX_VERTS; z++) {
                         if (this.adjMat[z][y] == 1) {
                             this.adjMat[z][x] = 1;
+
                         }
 
                     }
