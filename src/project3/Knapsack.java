@@ -6,6 +6,7 @@ package project3;
  * so that the knapsack ends up with a specified total weight
  * @author Jason Travis
  */
+ jun
 public class Knapsack {
 
     private int capacity;
